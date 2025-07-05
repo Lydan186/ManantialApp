@@ -8,8 +8,6 @@ import UserProfileTab from './UserProfile';
 
 
 
-
-
 export default function Home() {
 
   //Datos de usuario

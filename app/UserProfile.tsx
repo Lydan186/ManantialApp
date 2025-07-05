@@ -1,5 +1,5 @@
 import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc, getFirestore } from 'firebase/firestore'; // Importa updateDoc
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore'; // Importa updateDoc
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'; // Importa Modal y TextInput
 import { app } from '../scripts/conexiónFirebase';
@@ -56,7 +56,7 @@ type ProfileFieldProps = {
 };
 
 
-const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, onEdit }) => ( // Recibe onEdit
+const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, onEdit }) => (
   <View style={userStyles.field}>
     <Text style={userStyles.label}>{label}</Text>
     <View style={userStyles.row}>
@@ -65,14 +65,36 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, 
         bold && { fontWeight: 'bold' },
         small && { fontSize: 13 }
       ]}>{value}</Text>
-      <TouchableOpacity style={userStyles.editButton} onPress={onEdit}> {/* Usa la prop onEdit */}
-        <Text style={userStyles.editButtonText}>Editar</Text>
-      </TouchableOpacity>
+      {onEdit && (
+        <TouchableOpacity style={userStyles.editButton} onPress={onEdit}>
+          <Text style={userStyles.editButtonText}>Editar</Text>
+        </TouchableOpacity>
+      )}
     </View>
   </View>
 );
 
 
+
+const [editingField, setEditingField] = useState<string | null>(null);
+const [newValue, setNewValue] = useState('');
+
+
+const handleSaveEdit = async () => {
+  if (!editingField) return;
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userRef = doc(db, 'usuarios', user.uid);
+  await updateDoc(userRef, {
+    [editingField]: newValue
+  });
+
+  setUserData({ ...userData, [editingField]: newValue });
+  setEditingField(null);
+};
 
 
 

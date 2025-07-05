@@ -1,9 +1,36 @@
 import { Image } from 'expo-image';
-import { StyleSheet, TextInput, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, TextInput, Text, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { View } from 'react-native';
 import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+// Importa Firebase Auth
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { app } from '../scripts/conexiónFirebase';
+
+
 
 export default function HomeScreen() {
+
+  const router = useRouter();  // <-- aquí declaras router
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+   const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Error', 'Por favor ingresa correo y contraseña');
+    return;
+  }
+  const auth = getAuth(app);
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    router.push('/Home'); 
+  } catch (error) {
+    Alert.alert('Error de inicio de sesión', 'Correo o contraseña incorrectos');
+    console.error('Login error:', error);
+  }
+};
+
   return (
     <View style={styles.container}>
 
@@ -12,29 +39,38 @@ export default function HomeScreen() {
         style={styles.logo}
       />
 
-      <View style={styles.content}>
+       <View style={styles.content}>
         <TextInput
           style={styles.input}
           placeholder='Usuario o Correo electrónico'
           placeholderTextColor="#B0C4DE"
+          onChangeText={setEmail}
+          value={email}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
-        <TextInput
+
+         <TextInput
           style={styles.input}
           placeholder='Contraseña'
           placeholderTextColor="#B0C4DE"
           secureTextEntry
+          onChangeText={setPassword}
+          value={password}
         />
 
-        <TouchableOpacity>
-          <Text style={styles.forgotText}>¿Olvidó su usuario o contraseña?</Text>
-        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/PasswordRecovery')}>
+      <Text style={styles.forgotText}>¿Olvidó su usuario o contraseña?</Text>
+    </TouchableOpacity>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.whiteButton}>
-            <Text style={styles.buttonTextBlack}>Crear Usuario</Text>
-          </TouchableOpacity>
+          <Link href="/Register" asChild>
+            <TouchableOpacity style={styles.whiteButton}>
+              <Text style={styles.buttonTextBlack}>Crear Usuario</Text>
+            </TouchableOpacity>
+          </Link>
 
-          <TouchableOpacity style={styles.whiteButton}>
+          <TouchableOpacity style={styles.whiteButton} onPress={handleLogin}>
             <Text style={styles.buttonTextBlack}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
@@ -68,7 +104,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 55,
     borderRadius: 20,
-    backgroundColor: '#004B7F', 
+    backgroundColor: '#004B7F',
     color: '#fff',
     fontSize: 16,
     paddingHorizontal: 20,

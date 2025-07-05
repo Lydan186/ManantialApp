@@ -1,7 +1,7 @@
 import { getAuth, signOut } from 'firebase/auth';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore'; // Importa updateDoc
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'; // Importa Modal y TextInput
+import { ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'; // Importa Modal y TextInput
 import { app } from '../scripts/conexiónFirebase';
 
 type Props = {
@@ -9,11 +9,11 @@ type Props = {
   setActiveTab: (tab: string) => void;
 };
 
-
-
-  const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
+const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [newValue, setNewValue] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -42,19 +42,105 @@ type Props = {
     }
   };
 
+  const handleSaveEdit = async () => {
+    if (!editingField || !userData) return;
+    try {
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const userRef = doc(db, 'usuarios', user.uid);
+      await updateDoc(userRef, {
+        [editingField]: newValue,
+      });
+
+      setUserData({ ...userData, [editingField]: newValue });
+      setEditingField(null);
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo guardar el cambio');
+    }
+  };
+
   if (loading) return <ActivityIndicator color="#00BFFF" style={{ marginTop: 40 }} />;
   if (!userData) return <Text style={{ color: 'white', marginTop: 20 }}>No se encontraron datos.</Text>;
 
+  return (
+    <View style={userStyles.profileContainer}>
+      <View style={userStyles.card}>
+        <ProfileField label="Nombre Completo" value={userData.nombre} bold onEdit={() => { setEditingField('nombre'); setNewValue(userData.nombre); }} />
+        <ProfileField label="Correo Electrónico" value={userData.email} small onEdit={() => { setEditingField('email'); setNewValue(userData.email); }} />
+        <ProfileField label="Número de Teléfono" value={userData.telefono} bold onEdit={() => { setEditingField('telefono'); setNewValue(userData.telefono); }} />
+        <ProfileField label="Contraseña" value="********" onEdit={() => { setEditingField('contraseña'); setNewValue(''); }} />
+        <ProfileField label="Provincia" value={userData.provincia} onEdit={() => { setEditingField('provincia'); setNewValue(userData.provincia); }} />
+        <ProfileField label="Cantón" value={userData.canton} onEdit={() => { setEditingField('canton'); setNewValue(userData.canton); }} />
+        <ProfileField label="Distrito" value={userData.distrito} onEdit={() => { setEditingField('distrito'); setNewValue(userData.distrito); }} />
+        <ProfileField label="Dirección" value={userData.direccion} small onEdit={() => { setEditingField('direccion'); setNewValue(userData.direccion); }} />
 
+        <View style={userStyles.field}>
+          <Text style={userStyles.labelAsada}>Su Asada Actual</Text>
+          <View style={userStyles.row}>
+            <Text style={userStyles.valueAsada}>
+              {userData.asadaActual?.trim() ? userData.asadaActual : 'No se ha afiliado a ninguna ASADA'}
+            </Text>
+            <TouchableOpacity style={userStyles.asadaButton} onPress={() => {
+              Alert.alert('Gestión ASADA', 'Funcionalidad en desarrollo');
+            }}>
+              <Text style={userStyles.asadaButtonText}>Gestionar Mi ASADA</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+
+      <View style={userStyles.footerRow}>
+        <TouchableOpacity style={userStyles.footerButton} onPress={() => setActiveTab('home')}>
+          <Text style={userStyles.footerButtonText}>Regresar al Inicio</Text>
+        </TouchableOpacity>
+        <Image source={require('@/assets/images/manantial-logo.png')} style={userStyles.footerLogo} />
+        <TouchableOpacity style={userStyles.footerButton} onPress={handleLogout}>
+          <Text style={userStyles.footerButtonText}>Cerrar Sesión</Text>
+        </TouchableOpacity>
+      </View>
+
+      {editingField && (
+        <Modal transparent animationType="slide" visible>
+          <View style={userStyles.modalOverlay}>
+            <View style={userStyles.modalView}>
+              <Text style={userStyles.modalTitle}>Editar {editingField}</Text>
+              <TextInput
+                style={userStyles.modalInput}
+                value={newValue}
+                onChangeText={setNewValue}
+              />
+              <View style={userStyles.modalButtons}>
+                <TouchableOpacity
+                  style={[userStyles.modalButton, userStyles.modalButtonCancel]}
+                  onPress={() => setEditingField(null)}
+                >
+                  <Text style={userStyles.modalButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[userStyles.modalButton, userStyles.modalButtonSave]}
+                  onPress={handleSaveEdit}
+                >
+                  <Text style={userStyles.modalButtonText}>Guardar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+    </View>
+  );
+};
 
 type ProfileFieldProps = {
   label: string;
   value: string;
   bold?: boolean;
   small?: boolean;
-  onEdit?: () => void; // Ahora opcional
+  onEdit?: () => void;
 };
-
 
 const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, onEdit }) => (
   <View style={userStyles.field}>
@@ -74,99 +160,10 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, 
   </View>
 );
 
-
-
-const [editingField, setEditingField] = useState<string | null>(null);
-const [newValue, setNewValue] = useState('');
-
-
-const handleSaveEdit = async () => {
-  if (!editingField) return;
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const userRef = doc(db, 'usuarios', user.uid);
-  await updateDoc(userRef, {
-    [editingField]: newValue
-  });
-
-  setUserData({ ...userData, [editingField]: newValue });
-  setEditingField(null);
-};
-
-
-
-  return (
-    <View style={userStyles.profileContainer}>
-      <View style={userStyles.card}>
-        <ProfileField label="Nombre Completo" value={userData.nombre} bold />
-        <ProfileField label="Correo Electrónico" value={userData.email} small />
-        <ProfileField label="Número de Teléfono" value={userData.telefono} bold />
-        <ProfileField label="Contraseña" value={"********"} />
-        <ProfileField label="Provincia" value={userData.provincia} />
-        <ProfileField label="Cantón" value={userData.canton} />
-        <ProfileField label="Distrito" value={userData.distrito} />
-        <ProfileField label="Dirección" value={userData.direccion} small />
-        <View style={userStyles.field}>
-  <Text style={userStyles.labelAsada}>Su Asada Actual</Text>
-  <View style={userStyles.row}>
-    <Text style={userStyles.valueAsada}>
-      {userData.asadaActual && userData.asadaActual.trim() !== ''
-        ? userData.asadaActual
-        : 'No se ha afiliado a ninguna ASADA'}
-    </Text>
-    <TouchableOpacity style={userStyles.asadaButton} onPress={() => {
-      // Aquí puedes agregar la lógica para gestionar la ASADA
-      Alert.alert('Gestión ASADA', 'Funcionalidad en desarrollo');
-    }}>
-      <Text style={userStyles.asadaButtonText}>Gestionar Mi ASADA</Text>
-    </TouchableOpacity>
-  </View>
-</View>
-      </View>
-      <View style={userStyles.footerRow}>
-        <TouchableOpacity style={userStyles.footerButton} onPress={() => setActiveTab('home')}>
-          <Text style={userStyles.footerButtonText}>Regresar al Inicio</Text>
-        </TouchableOpacity>
-        <Image
-          source={require('@/assets/images/manantial-logo.png')}
-          style={userStyles.footerLogo}
-        />
-        <TouchableOpacity style={userStyles.footerButton} onPress={handleLogout}>
-          <Text style={userStyles.footerButtonText}>Cerrar Sesión</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
-
-type ProfileFieldProps = {
-  label: string;
-  value: string;
-  bold?: boolean;
-  small?: boolean;
-  onEdit: () => void; // Agrega esta prop
-};
-
-const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small }) => (
-  <View style={userStyles.field}>
-    <Text style={userStyles.label}>{label}</Text>
-    <View style={userStyles.row}>
-      <Text style={[
-        userStyles.value,
-        bold && { fontWeight: 'bold' },
-        small && { fontSize: 13 }
-      ]}>{value}</Text>
-      <TouchableOpacity style={userStyles.editButton}>
-        <Text style={userStyles.editButtonText}>Editar</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
-
 export default UserProfileTab;
+
+
+
 const userStyles = StyleSheet.create({
  profileContainer: {
   flex: 1,

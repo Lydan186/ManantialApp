@@ -6,12 +6,10 @@ import UserProfileTab from './UserProfile';
 
 
 
-
-
 export default function Home() {
 
   //Datos de usuario
- const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
 
@@ -72,10 +70,10 @@ export default function Home() {
 
 
       <ScrollView
-  style={styles.scrollView}
-  contentContainerStyle={styles.scrollContent}
->
-      
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+
 
         {activeTab === 'home' && (
           <>
@@ -258,6 +256,9 @@ export default function Home() {
               Aquí verá sus notificaciones más recientes
             </Text>
           </View>
+
+
+          //llamado de tab User profile con los datos del usuario activo
         )}
 
         {activeTab === 'user' && (
@@ -380,17 +381,17 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   scrollView: {
-  flex: 1,
-  backgroundColor: '#0066A1', // Fondo azul
-},
+    flex: 1,
+    backgroundColor: '#0066A1', // Fondo azul
+  },
 
-scrollContent: {
-  flexGrow: 1,
-  alignItems: 'center',
-  paddingHorizontal: 20,
-  paddingTop: 20,
-  paddingBottom: 100, // margen inferior para evitar recorte en algunos móviles
-},
+  scrollContent: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 100, // margen inferior para evitar recorte en algunos móviles
+  },
 
 
 

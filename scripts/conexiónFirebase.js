@@ -1,3 +1,9 @@
+//Conexiòn con base de datos firebase
+
+
+
+
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth"; // Si usarás autenticación
@@ -20,4 +26,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app); // Opcional
 
-export { auth, db, app };
+export { app, auth, db };

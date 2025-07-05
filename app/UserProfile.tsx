@@ -45,6 +45,37 @@ type Props = {
   if (loading) return <ActivityIndicator color="#00BFFF" style={{ marginTop: 40 }} />;
   if (!userData) return <Text style={{ color: 'white', marginTop: 20 }}>No se encontraron datos.</Text>;
 
+
+
+type ProfileFieldProps = {
+  label: string;
+  value: string;
+  bold?: boolean;
+  small?: boolean;
+  onEdit?: () => void; // Ahora opcional
+};
+
+
+const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, bold, small, onEdit }) => ( // Recibe onEdit
+  <View style={userStyles.field}>
+    <Text style={userStyles.label}>{label}</Text>
+    <View style={userStyles.row}>
+      <Text style={[
+        userStyles.value,
+        bold && { fontWeight: 'bold' },
+        small && { fontSize: 13 }
+      ]}>{value}</Text>
+      <TouchableOpacity style={userStyles.editButton} onPress={onEdit}> {/* Usa la prop onEdit */}
+        <Text style={userStyles.editButtonText}>Editar</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
+
+
+
+
   return (
     <View style={userStyles.profileContainer}>
       <View style={userStyles.card}>

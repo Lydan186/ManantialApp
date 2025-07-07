@@ -14,6 +14,8 @@ import { auth } from '../scripts/conexiónFirebase';
 
 
 const RegisterScreen = () => {
+
+
     const [openProvincia, setOpenProvincia] = useState(false);
     const [provincia, setProvincia] = useState(null);
     const [provincias, setProvincias] = useState([
@@ -77,7 +79,7 @@ const RegisterScreen = () => {
 
     return (
         <>
-            {/* <Stack.Screen options={{ headerShown: false }} /> 👈 Esto oculta la barra */}
+            <Stack.Screen options={{ headerShown: false }} />
 
             <ScrollView contentContainerStyle={styles.container}>
                 <Image

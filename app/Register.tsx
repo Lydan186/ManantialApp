@@ -4,12 +4,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
-import { Stack } from 'expo-router';  //importa router para ocultar linea
+import { Stack } from 'expo-router';
 
-//Imports para firebase
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../scripts/conexiónFirebase'; // Ajusta el path si es necesario
+import { db } from '../scripts/conexiónFirebase'; 
 import { auth } from '../scripts/conexiónFirebase';
 
 
@@ -49,12 +48,12 @@ const RegisterScreen = () => {
         }
 
         try {
-            // Crear usuario con email y password
+            
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
             const user = userCredential.user;
 
-            // Guardar información adicional en Firestore
+            
             await setDoc(doc(db, "usuarios", user.uid), {
                 nombre,
                 email,
@@ -68,7 +67,7 @@ const RegisterScreen = () => {
             });
 
             alert("¡Usuario registrado exitosamente!");
-            router.push('/'); // Redirige al home o login
+            router.push('/'); 
         } catch (error: any) {
             console.error("Error en Firebase:", error.code, error.message);
             alert("Error al registrar: " + error.message);
@@ -78,7 +77,7 @@ const RegisterScreen = () => {
 
     return (
         <>
-            <Stack.Screen options={{ headerShown: false }} /> {/* 👈 Esto oculta la barra */}
+            {/* <Stack.Screen options={{ headerShown: false }} /> 👈 Esto oculta la barra */}
 
             <ScrollView contentContainerStyle={styles.container}>
                 <Image

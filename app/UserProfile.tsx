@@ -1,7 +1,7 @@
-import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore'; // Importa updateDoc
+import { getAuth, signOut, updateEmail } from 'firebase/auth';
+import { doc, getDoc, getFirestore, updateDoc, deleteDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'; // Importa Modal y TextInput
+import { ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { app } from '../scripts/conexiónFirebase';
 
 type Props = {
@@ -13,6 +13,7 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [editingField, setEditingField] = useState<string | null>(null);
+  const [deleteField, setDeleteField] = useState(false);
   const [newValue, setNewValue] = useState('');
 
   useEffect(() => {
@@ -42,18 +43,45 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!deleteField || !userData) return;
+    try {
+      const auth = getAuth(app);
+      const user = auth.currentUser;
+      const db = getFirestore(app);
+      if (!user) return;
+
+      await deleteDoc(doc(db, 'usuarios', user.uid));
+
+      await user.delete();
+
+      await signOut(auth);
+
+      router.replace('/');
+
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo borrar el usuario');
+    } finally {
+      setDeleteField(false);
+    }
+  };
+
   const handleSaveEdit = async () => {
     if (!editingField || !userData) return;
     try {
       const auth = getAuth(app);
-      const db = getFirestore(app);
       const user = auth.currentUser;
+      const db = getFirestore(app);
       if (!user) return;
 
       const userRef = doc(db, 'usuarios', user.uid);
       await updateDoc(userRef, {
         [editingField]: newValue,
       });
+
+      if (editingField == 'email') {
+        await updateEmail(user, newValue);
+      }
 
       setUserData({ ...userData, [editingField]: newValue });
       setEditingField(null);
@@ -71,7 +99,6 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
         <ProfileField label="Nombre Completo" value={userData.nombre} bold onEdit={() => { setEditingField('nombre'); setNewValue(userData.nombre); }} />
         <ProfileField label="Correo Electrónico" value={userData.email} small onEdit={() => { setEditingField('email'); setNewValue(userData.email); }} />
         <ProfileField label="Número de Teléfono" value={userData.telefono} bold onEdit={() => { setEditingField('telefono'); setNewValue(userData.telefono); }} />
-        <ProfileField label="Contraseña" value="********" onEdit={() => { setEditingField('contraseña'); setNewValue(''); }} />
         <ProfileField label="Provincia" value={userData.provincia} onEdit={() => { setEditingField('provincia'); setNewValue(userData.provincia); }} />
         <ProfileField label="Cantón" value={userData.canton} onEdit={() => { setEditingField('canton'); setNewValue(userData.canton); }} />
         <ProfileField label="Distrito" value={userData.distrito} onEdit={() => { setEditingField('distrito'); setNewValue(userData.distrito); }} />
@@ -88,7 +115,14 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
             }}>
               <Text style={userStyles.asadaButtonText}>Gestionar Mi ASADA</Text>
             </TouchableOpacity>
+
           </View>
+
+        </View>
+          <View style={userStyles.row}>
+            <TouchableOpacity style={userStyles.footerButton} onPress={() => setDeleteField(true)}>
+              <Text style={userStyles.footerButtonText}>Eliminar Cuenta</Text>
+            </TouchableOpacity>
         </View>
       </View>
 
@@ -100,6 +134,8 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
         <TouchableOpacity style={userStyles.footerButton} onPress={handleLogout}>
           <Text style={userStyles.footerButtonText}>Cerrar Sesión</Text>
         </TouchableOpacity>
+        {/* <Image source={require('@/assets/images/manantial-logo.png')} style={userStyles.footerLogo} /> */}
+
       </View>
 
       {editingField && (
@@ -124,6 +160,30 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
                   onPress={handleSaveEdit}
                 >
                   <Text style={userStyles.modalButtonText}>Guardar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {deleteField && (
+        <Modal transparent animationType="slide" visible>
+          <View style={userStyles.modalOverlay}>
+            <View style={userStyles.modalView}>
+              <Text style={userStyles.modalTitle}>¿Estás seguro de querer eliminar este usuario?{deleteField}</Text>
+              <View style={userStyles.modalButtons}>
+                <TouchableOpacity
+                  style={[userStyles.modalButton, userStyles.modalButtonCancel]}
+                  onPress={() => setDeleteField(false)}
+                >
+                  <Text style={userStyles.modalButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[userStyles.modalButton, userStyles.modalButtonSave]}
+                  onPress={handleDeleteUser}
+                >
+                  <Text style={userStyles.modalButtonText}>Borrar usuario</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -165,14 +225,14 @@ export default UserProfileTab;
 
 
 const userStyles = StyleSheet.create({
- profileContainer: {
-  flex: 1,
-  width: '100%',
-  
-  alignItems: 'center',
-  backgroundColor: '#0066A1', // Mismo fondo azul que el resto
-  paddingBottom: 50,
-},
+  profileContainer: {
+    flex: 1,
+    width: '100%',
+
+    alignItems: 'center',
+    backgroundColor: '#0066A1', // Mismo fondo azul que el resto
+    paddingBottom: 50,
+  },
   card: {
     width: '100%',
     height: '100%',
@@ -191,7 +251,7 @@ const userStyles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    
+
     color: '#0099ff',
     fontWeight: 'bold',
     fontSize: 15,
@@ -204,7 +264,7 @@ const userStyles = StyleSheet.create({
     marginBottom: 2,
   },
   row: {
-    
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -251,7 +311,7 @@ const userStyles = StyleSheet.create({
     fontSize: 15,
   },
   footerRow: {
-    
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -284,7 +344,7 @@ const userStyles = StyleSheet.create({
   },
 
 
-//Css para la edición
+  //Css para la edición
 
   modalOverlay: {
     flex: 1,
@@ -351,5 +411,5 @@ const userStyles = StyleSheet.create({
     fontSize: 16,
   },
 
-  
+
 });

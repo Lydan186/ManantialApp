@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import UserProfileTab from './UserProfile';
+import Report from './reports';
+import Chats from './chats';
+import Announces from './announces';
+import Notification from './notifications';
 
 
 
@@ -108,157 +112,19 @@ export default function Home() {
         }
 
         {activeTab === 'reports' && (
-          <View style={styles.reportBox}>
-            {/* Hooks requeridos */}
-            <Text style={styles.label}>Tipo de reporte</Text>
-            <View style={styles.row}>
-              <View style={{ flex: 1, marginRight: 5 }}>
-                <TextInput
-                  placeholder="Tipo de reporte"
-                  value={type}
-                  onChangeText={setType}
-                  style={styles.inputBox}
-                  placeholderTextColor="#999"
-                />
-              </View>
-              <View style={{ flex: 1, marginLeft: 5 }}>
-                <TextInput
-                  placeholder="Proveedor del Servicio"
-                  value={provider}
-                  onChangeText={setProvider}
-                  style={styles.inputBox}
-                  placeholderTextColor="#999"
-                />
-              </View>
-            </View>
-
-            <Text style={styles.label}>Detalle del Reporte</Text>
-            <TextInput
-              placeholder="Describa el problema..."
-              value={details}
-              onChangeText={setDetails}
-              multiline
-              style={styles.textArea}
-              placeholderTextColor="#999"
-            />
-
-            <Text style={styles.label}>Dirección</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TextInput
-                placeholder="Dirección de residencia"
-                value={address}
-                onChangeText={setAddress}
-                style={[styles.inputBox, { flex: 1 }]}
-                placeholderTextColor="#999"
-              />
-              <Image
-                source={require('@/assets/images/manantial-logo.png')}
-                style={{ width: 60, height: 60, marginLeft: 10, resizeMode: 'contain' }}
-              />
-            </View>
-
-            <Text style={styles.label}>Nivel de Urgencia:</Text>
-            <View style={styles.urgencyRow}>
-              {['Poca', 'Moderada', 'Mucha'].map((level) => (
-                <TouchableOpacity
-                  key={level}
-                  style={styles.checkboxContainer}
-                  onPress={() => setUrgency(level)}
-                >
-                  <View style={[styles.checkbox, urgency === level && { backgroundColor: '#00BFFF' }]} />
-                  <Text style={styles.urgencyText}>{level}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <TouchableOpacity style={styles.sendButton}>
-              <Text style={styles.sendButtonText}>Enviar Reporte</Text>
-            </TouchableOpacity>
-
-            <View style={styles.historyBox}>
-              <Text style={styles.label}>Historial de Reportes</Text>
-              <View style={styles.historyItem}>
-                <Text style={styles.historyText}>
-                  Aquí se visualizarán sus reportes
-                </Text>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.extendButton}>
-              <Text style={styles.extendButtonText}>Extender Historial</Text>
-            </TouchableOpacity>
-          </View>
+          <Report router={router} setActiveTab={setActiveTab} />
         )}
 
         {activeTab === 'announces' && (
-          <View style={styles.announcesBox}>
-            <Text style={styles.announcesTitle}>Anuncios</Text>
-
-            <View style={styles.whiteBox}>
-              <Text style={styles.announcesText}>
-                <Text style={{ fontWeight: 'bold' }}>La Asada de Golfito (ASADAGOL),</Text> ha iniciado con el
-                proyecto denominado:
-              </Text>
-              <Text style={styles.announcesText}>
-                <Text style={{ fontWeight: 'bold' }}>
-                  Programa Ambiental de las comunidades para el desarrollo Sostenible medio ambiente y el
-                  Recurso Hídrico en Costa Rica
-                </Text>
-              </Text>
-              <Text style={styles.announcesText}>
-                El día de hoy 31 de julio, el personal de esta asada, efectuaron siembra de árboles de
-                Especies como Almendro Amarillo, Sota caballo, Cedro, Gallinazo Roble Sabana, sector
-                Finca Ambiental, Asadagol Llano Bonito y en las orillas de quebrada de la Mona de Golfito.
-              </Text>
-
-              {/* Cuadrícula de imágenes */}
-              <View style={styles.imageGrid}>
-                <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio.jpg')} style={styles.gridImage} />
-                <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio2.jpg')} style={styles.gridImage} />
-                <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio3.jpg')} style={styles.gridImage} />
-                <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio4.jpg')} style={styles.gridImage} />
-              </View>
-            </View>
-
-            {/* Alerta al final */}
-            <View style={styles.alertBox}>
-              <Text style={styles.alertText}>
-                <Text style={{ fontWeight: 'bold' }}>¡Atención!{"\n"}</Text>
-                Corte del servicio de Agua el 30 de mayo debido a mantenimiento de 12 am a 3 pm{"\n"}
-                - ASADAGOL
-              </Text>
-            </View>
-          </View>
+          <Announces router={router} setActiveTab={setActiveTab} />
         )}
 
         {activeTab === 'chats' && (
-          <View style={styles.chatContainer}>
-            <View style={styles.chatBox}>
-              <Text style={styles.chatText}>
-                Aquí verá sus chats más recientes
-              </Text>
-
-              <Image
-                source={require('@/assets/images/Icon-Chat.png')}
-                style={styles.chatIcon}
-              />
-            </View>
-
-            <TouchableOpacity style={styles.newChatButton}>
-              <Text style={styles.newChatText}>+ Nuevo Chat</Text>
-            </TouchableOpacity>
-          </View>
+          <Chats router={router} setActiveTab={setActiveTab} />
         )}
 
         {activeTab === 'notifications' && (
-          <View style={styles.notificationBox}>
-            <Text style={styles.notificationText}>
-              Aquí verá sus notificaciones más recientes
-            </Text>
-          </View>
-
-
-          //llamado de tab User profile con los datos del usuario activo
+          <Notification router={router} setActiveTab={setActiveTab} />
         )}
 
         {activeTab === 'user' && (

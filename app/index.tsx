@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { Link } from 'expo-router';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-// Importa Firebase Auth
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from '../scripts/conexiónFirebase';
 
@@ -12,7 +11,7 @@ import { app } from '../scripts/conexiónFirebase';
 
 export default function HomeScreen() {
 
-  const router = useRouter();  // <-- aquí declaras router
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

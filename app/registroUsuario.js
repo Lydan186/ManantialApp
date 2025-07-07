@@ -9,4 +9,4 @@ const RegistroUsuario = () => {
   );
 };
 
-export default RegistroUsuario; // ✅ Esta línea también
+export default RegistroUsuario;

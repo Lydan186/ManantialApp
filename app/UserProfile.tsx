@@ -1,5 +1,5 @@
 import { getAuth, signOut, updateEmail } from 'firebase/auth';
-import { doc, getDoc, getFirestore, updateDoc, deleteDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { app } from '../scripts/conexiónFirebase';
@@ -117,13 +117,13 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
             </TouchableOpacity>
 
           </View>
-
-        </View>
           <View style={userStyles.row}>
             <TouchableOpacity style={userStyles.footerButton} onPress={() => setDeleteField(true)}>
               <Text style={userStyles.footerButtonText}>Eliminar Cuenta</Text>
             </TouchableOpacity>
+          </View>
         </View>
+
       </View>
 
       <View style={userStyles.footerRow}>
@@ -330,6 +330,7 @@ const userStyles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 2,
+    marginTop: 10
   },
   footerButtonText: {
     color: '#fff',

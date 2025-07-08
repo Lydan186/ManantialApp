@@ -1,10 +1,8 @@
 import { Image } from 'expo-image';
-import { StyleSheet, TextInput, Text, TouchableOpacity, Dimensions, Alert } from 'react-native';
-import { View } from 'react-native';
-import { Link } from 'expo-router';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { Link, useRouter } from 'expo-router';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native';
 import { app } from '../scripts/conexiónFirebase';
 
 
@@ -15,20 +13,30 @@ export default function HomeScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-   const handleLogin = async () => {
-  if (!email || !password) {
-    Alert.alert('Error', 'Por favor ingresa correo y contraseña');
-    return;
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Por favor ingresa correo y contraseña');
+      return;
+    }
+    const auth = getAuth(app);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/Home');
+    } catch (error) {
+      Alert.alert('Error de inicio de sesión', 'Correo o contraseña incorrectos');
+      console.error('Login error:', error);
+    }
+  };
+
+
+  {
+    logoLoading && (
+      <ActivityIndicator size="large" color="#fff" style={{ position: 'absolute', top: 100 }} />
+    )
   }
-  const auth = getAuth(app);
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    router.push('/Home'); 
-  } catch (error) {
-    Alert.alert('Error de inicio de sesión', 'Correo o contraseña incorrectos');
-    console.error('Login error:', error);
-  }
-};
+
 
   return (
     <View style={styles.container}>
@@ -36,9 +44,12 @@ export default function HomeScreen() {
       <Image
         source={require('@/assets/images/manantial-logo.png')}
         style={styles.logo}
+        contentFit="contain"
+        transition={200}
+        onLoadEnd={() => setLogoLoading(false)}
       />
 
-       <View style={styles.content}>
+      <View style={styles.content}>
         <TextInput
           style={styles.input}
           placeholder='Usuario o Correo electrónico'
@@ -49,7 +60,7 @@ export default function HomeScreen() {
           autoCapitalize="none"
         />
 
-         <TextInput
+        <TextInput
           style={styles.input}
           placeholder='Contraseña'
           placeholderTextColor="#B0C4DE"
@@ -59,8 +70,8 @@ export default function HomeScreen() {
         />
 
         <TouchableOpacity onPress={() => router.push('/PasswordRecovery')}>
-      <Text style={styles.forgotText}>¿Olvidó su usuario o contraseña?</Text>
-    </TouchableOpacity>
+          <Text style={styles.forgotText}>¿Olvidó su usuario o contraseña?</Text>
+        </TouchableOpacity>
 
         <View style={styles.buttonContainer}>
           <Link href="/Register" asChild>
@@ -89,8 +100,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
     marginTop: 30,
     resizeMode: 'contain',
   },

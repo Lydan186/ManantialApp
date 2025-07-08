@@ -1,6 +1,6 @@
 import { Link, Stack, useRouter, } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import UserProfileTab from './UserProfile';
 import Announces from './announces';
@@ -83,7 +83,17 @@ export default function Home() {
             <View style={styles.darkBox}>
               <Text style={styles.title}>Su ASADA más cercana respecto a su zona Geográfica</Text>
               <View style={styles.mapPhotoContainer}>
-                <Image source={require('@/assets/images/Mapa-Asadagol.png')} style={styles.mapImage} />
+                <TouchableOpacity
+                  onPress={() => {
+                     
+                    const placeId = '0x8fa44333b4ac94af:0xc9bf6a0297d6d313';
+                    const url = `https://www.google.com/maps/search/?api=1&query_place_id=${placeId}`;
+                    Linking.openURL(url);
+                  }}
+                >
+                  <Image source={require('@/assets/images/Mapa-Asadagol.png')} style={styles.mapImage} />
+                </TouchableOpacity>
+
                 <Image source={require('@/assets/images/Asadagol.jpg')} style={styles.photoImage} />
               </View>
               <View style={styles.rowButtons}>
@@ -97,15 +107,15 @@ export default function Home() {
             </View>
 
             <Link href="/ASADAInfo" asChild>
-            <TouchableOpacity style={styles.wideButton}>
-              <Text style={styles.buttonText}>Solicite los servicios de una ASADA Aquí</Text>
-            </TouchableOpacity>
-          </Link>
+              <TouchableOpacity style={styles.wideButton}>
+                <Text style={styles.buttonText}>Solicite los servicios de una ASADA Aquí</Text>
+              </TouchableOpacity>
+            </Link>
 
-          <Link href='/asadaInformation' asChild>
-            <TouchableOpacity style={styles.wideButton}>
-              <Text style={styles.buttonText}>Quiero informarme sobre las ASADAS</Text>
-            </TouchableOpacity>
+            <Link href='/asadaInformation' asChild>
+              <TouchableOpacity style={styles.wideButton}>
+                <Text style={styles.buttonText}>Quiero informarme sobre las ASADAS</Text>
+              </TouchableOpacity>
             </Link>
             <Image style={styles.logo} source={require('@/assets/images/manantial-logo.png')} />
           </>
@@ -172,6 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 15,
+    width: '100%',
   },
   mapImage: {
     width: width * 0.42,
@@ -241,7 +252,7 @@ const styles = StyleSheet.create({
 
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20, 
+    paddingTop: 20,
     backgroundColor: '#0066A1',
     alignItems: 'center',
     paddingBottom: 50,
@@ -249,7 +260,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    backgroundColor: '#0066A1', 
+    backgroundColor: '#0066A1',
   },
 
   scrollContent: {

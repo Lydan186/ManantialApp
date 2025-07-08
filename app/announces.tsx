@@ -29,7 +29,6 @@ const Announces: React.FC<Props> = ({ router, setActiveTab }) => {
                 Finca Ambiental, Asadagol Llano Bonito y en las orillas de quebrada de la Mona de Golfito.
               </Text>
 
-              {/* Cuadrícula de imágenes */}
               <View style={styles.imageGrid}>
                 <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio.jpg')} style={styles.gridImage} />
                 <Image source={require('@/assets/images/Anuncios/Imagen-Anuncio2.jpg')} style={styles.gridImage} />
@@ -38,7 +37,6 @@ const Announces: React.FC<Props> = ({ router, setActiveTab }) => {
               </View>
             </View>
 
-            {/* Alerta al final */}
             <View style={styles.alertBox}>
               <Text style={styles.alertText}>
                 <Text style={{ fontWeight: 'bold' }}>¡Atención!{"\n"}</Text>

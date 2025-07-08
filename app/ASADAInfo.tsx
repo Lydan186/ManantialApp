@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         marginBottom: 10,
+        marginTop: 30,
     },
     searchInput: {
         flex: 1,
@@ -141,24 +142,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         marginBottom: 10,
-        padding: 10, // margen interno para que la imagen no quede pegada
+        padding: 10, 
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 4,
-        alignItems: 'center', // centra verticalmente imagen y texto
+        alignItems: 'center', 
     },
     image: {
         width: '48%',
         height: 180,
-        borderRadius: 8, // redondeamos todos los bordes
-        resizeMode: 'cover', // ajusta bien la imagen
-        marginRight: 10, // espacio entre imagen y texto
+        borderRadius: 8, 
+        resizeMode: 'cover', 
+        marginRight: 10, 
     },
     info: {
         width: '48%',
-        justifyContent: 'space-around', // reparte mejor el contenido
+        justifyContent: 'space-around', 
     },
     cardTitle: {
         fontWeight: 'bold',
@@ -228,14 +229,14 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         resizeMode: 'contain',
-        marginBottom: 20,
+        marginBottom: 10,
     },
     joinButton: {
         backgroundColor: '#fff',
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 25,
-        marginBottom: 30,
+        marginBottom: 10,
     },
     joinButtonText: {
         color: '#004B7F',
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 25,
-        marginBottom: 30,
+        marginBottom: 10,
     },
     backButtonText: {
         color: '#004B7F',

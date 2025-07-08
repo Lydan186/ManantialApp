@@ -230,7 +230,7 @@ const userStyles = StyleSheet.create({
     width: '100%',
 
     alignItems: 'center',
-    backgroundColor: '#0066A1', // Mismo fondo azul que el resto
+    backgroundColor: '#0066A1',
     paddingBottom: 50,
   },
   card: {

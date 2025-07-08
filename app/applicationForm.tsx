@@ -10,7 +10,6 @@ const ApplicationForm = () => {
 
     const onSubmit = (data: any) => {
         console.log(data);
-        // Aquí puedes manejar el envío del formulario
     };
 
     return (
@@ -25,7 +24,6 @@ const ApplicationForm = () => {
                     Complete con sus datos el siguiente formulario para afiliarse al servicio de la ASADA [ASADAGOL]
                 </Text>
 
-                {/* Nombre */}
                 <Text style={styles.label}>Nombre:</Text>
                 <Controller
                     control={control}
@@ -41,7 +39,6 @@ const ApplicationForm = () => {
                     )}
                 />
 
-                {/* Apellidos */}
                 <Text style={styles.label}>Apellidos:</Text>
                 <Controller
                     control={control}
@@ -57,7 +54,6 @@ const ApplicationForm = () => {
                     )}
                 />
 
-                {/* Ubicación */}
                 <Text style={styles.label}>Ubicación:</Text>
                 <Controller
                     control={control}
@@ -73,7 +69,6 @@ const ApplicationForm = () => {
                     )}
                 />
 
-                {/* Email */}
                 <Text style={styles.label}>Email:</Text>
                 <Controller
                     control={control}
@@ -90,7 +85,6 @@ const ApplicationForm = () => {
                     )}
                 />
 
-                {/* Tipo de Servicio */}
                 <Text style={styles.label}>Tipo de Servicio:</Text>
                 <Controller
                     control={control}
@@ -106,7 +100,6 @@ const ApplicationForm = () => {
                     )}
                 />
 
-                {/* Detalle */}
                 <Text style={styles.label}>Detalle:</Text>
                 <Controller
                     control={control}
@@ -128,7 +121,6 @@ const ApplicationForm = () => {
                     <TouchableOpacity style={styles.navButton}><Text style={styles.navText}>Enviar Formulario</Text></TouchableOpacity>
                 </View>
 
-                {/* Botón regresar */}
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => router.back()}

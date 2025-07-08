@@ -2,12 +2,11 @@
  * 
  */
 
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { app } from '../scripts/conexiónFirebase';
-import { Stack } from 'expo-router';
 
 /**
  * 
@@ -106,9 +105,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf: 'center',
     paddingHorizontal: 40,
+    marginTop: 15,
+    marginBottom: 15,
   },
   buttonText: {
     color: '#0066A1',
     fontWeight: 'bold'
   },
+  
 });

@@ -1,13 +1,12 @@
-import { Stack, useRouter } from 'expo-router';
+import { Link, Stack, useRouter, } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import UserProfileTab from './UserProfile';
-import Report from './reports';
-import Chats from './chats';
 import Announces from './announces';
+import Chats from './chats';
 import Notification from './notifications';
-
+import Report from './reports';
 
 
 export default function Home() {
@@ -97,9 +96,12 @@ export default function Home() {
               </View>
             </View>
 
+            <Link href="/ASADAInfo" asChild>
             <TouchableOpacity style={styles.wideButton}>
               <Text style={styles.buttonText}>Solicite los servicios de una ASADA Aquí</Text>
             </TouchableOpacity>
+          </Link>
+
 
             <TouchableOpacity style={styles.wideButton}>
               <Text style={styles.buttonText}>Quiero informarme sobre las ASADAS</Text>

@@ -1,3 +1,6 @@
+/**
+ * Está pantalla es la encargada de mostrar los datos del usuario, además de poseer los botones de cerrar sesión, volver al inicio y eliminar la cuenta.
+ */
 import { getAuth, signOut, updateEmail } from 'firebase/auth';
 import { deleteDoc, doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +12,19 @@ type Props = {
   setActiveTab: (tab: string) => void;
 };
 
+/**
+ * Ok, en está pantalla se utilizan el useState y el useEffect, el useState es para obtener datos del usuario, que se extraen desde Firebase, 
+ * cargar los modals de editar y eliminar, obtener los nuevos valores que se le van a setear a los datos del usuario, etc. Para el useEffect se uso para 
+ * obtener los datos del usuario, ahora bien esto usando el docRef, que utilizando los datos de Firebase obtiene los datos del usuario, ahora muestra una condicional, en donde 
+ * si existen estos datos se setean y se muestran en la pantalla.
+ * 
+ * La siguiente función de handleLogout, utiliza la función de signOut para cerrar la sesión del sistema, después la función de handleDeleteUser usa la función de deleteDoc, para borrar los datos 
+ * del usuario de la colección y el user.delete(), esto para borrar los datos del usuario de la autenticación de Firebase. Por último está la función de handleSaveEdit, en está se utiliza el 
+ * updateDoc para guardar los datos nuevos que se editen en la colección de Firebase, aparte para actualizar el email, que este es el email de la autenticación de Firebase, se utiliza el 
+ * updateEmail.
+ * @param param0 Son los props para poder utilizar los modals.
+ * @returns La pantalla del perfil del usuario.
+ */
 const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -134,7 +150,6 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
         <TouchableOpacity style={userStyles.footerButton} onPress={handleLogout}>
           <Text style={userStyles.footerButtonText}>Cerrar Sesión</Text>
         </TouchableOpacity>
-        {/* <Image source={require('@/assets/images/manantial-logo.png')} style={userStyles.footerLogo} /> */}
 
       </View>
 
@@ -171,7 +186,7 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
         <Modal transparent animationType="slide" visible>
           <View style={userStyles.modalOverlay}>
             <View style={userStyles.modalView}>
-              <Text style={userStyles.modalTitle}>¿Estás seguro de querer eliminar este usuario?{deleteField}</Text>
+              <Text style={userStyles.modalTitle}>¿Estás seguro de querer eliminar esta cuenta?{deleteField}</Text>
               <View style={userStyles.modalButtons}>
                 <TouchableOpacity
                   style={[userStyles.modalButton, userStyles.modalButtonCancel]}
@@ -183,7 +198,7 @@ const UserProfileTab: React.FC<Props> = ({ router, setActiveTab }) => {
                   style={[userStyles.modalButton, userStyles.modalButtonSave]}
                   onPress={handleDeleteUser}
                 >
-                  <Text style={userStyles.modalButtonText}>Borrar usuario</Text>
+                  <Text style={userStyles.modalButtonText}>Continuar</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -343,9 +358,6 @@ const userStyles = StyleSheet.create({
     marginHorizontal: 5,
     resizeMode: 'contain',
   },
-
-
-  //Css para la edición
 
   modalOverlay: {
     flex: 1,

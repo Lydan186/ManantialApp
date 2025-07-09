@@ -1,35 +1,26 @@
+/**
+ * Está pantalla es la encargada de realizar el registro de usuario en la aplicación.
+ */
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-
 import { Stack } from 'expo-router';
-
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../scripts/conexiónFirebase'; 
+import { db } from '../scripts/conexiónFirebase';
 import { auth } from '../scripts/conexiónFirebase';
 
 
-
+/**
+ * En esta se presentan multiples useState para poder obtener los valores necesarios para la creación del usuario, para despues usar
+ * la función de createUserwithEmailAndPassword, además de usar el setDoc, que llama a la collection de "usuarios", esto utilizando todos los datos
+ * anteriormente seteados.
+ * @returns La pantalla de registro de usuario.
+ */
 const RegisterScreen = () => {
 
-
-    const [openProvincia, setOpenProvincia] = useState(false);
-    const [provincia, setProvincia] = useState(null);
-    const [provincias, setProvincias] = useState([
-        { label: 'San José', value: 'sanjose' },
-        { label: 'Alajuela', value: 'alajuela' },
-        { label: 'Cartago', value: 'cartago' },
-        { label: 'Heredia', value: 'heredia' },
-        { label: 'Guanacaste', value: 'guanacaste' },
-        { label: 'Puntarenas', value: 'puntarenas' },
-        { label: 'Limón', value: 'limon' },
-    ]);
-
-
-
+    const [provincia, setProvincia] = useState('');
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
@@ -39,9 +30,7 @@ const RegisterScreen = () => {
     const [distrito, setDistrito] = useState('');
     const [direccion, setDireccion] = useState('');
 
-
     const router = useRouter();
-
 
     const handleRegister = async () => {
         if (password !== confirmPassword) {
@@ -50,12 +39,10 @@ const RegisterScreen = () => {
         }
 
         try {
-            
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            
             await setDoc(doc(db, "usuarios", user.uid), {
                 nombre,
                 email,
@@ -69,18 +56,16 @@ const RegisterScreen = () => {
             });
 
             alert("¡Usuario registrado exitosamente!");
-            router.push('/'); 
+            router.push('/');
         } catch (error: any) {
             console.error("Error en Firebase:", error.code, error.message);
             alert("Error al registrar: " + error.message);
         }
     };
 
-
     return (
         <>
             <Stack.Screen options={{ headerShown: false }} />
-
             <ScrollView contentContainerStyle={styles.container}>
                 <Image
                     source={require('@/assets/images/manantial-logo.png')}
@@ -130,19 +115,12 @@ const RegisterScreen = () => {
                         onChangeText={setConfirmPassword}
                     />
 
-                    <DropDownPicker
+                    <TextInput
+                        style={styles.input}
                         placeholder="Provincia:"
-                        open={openProvincia}
+                        placeholderTextColor="#fff"
                         value={provincia}
-                        items={provincias}
-                        setOpen={setOpenProvincia}
-                        setValue={setProvincia}
-                        setItems={setProvincias}
-                        style={styles.dropdown}
-                        textStyle={styles.dropdownText}
-                        dropDownContainerStyle={styles.dropdownContainer}
-                        zIndex={3000}
-                        zIndexInverse={1000}
+                        onChangeText={setProvincia}
                     />
 
                     <TextInput

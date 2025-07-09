@@ -1,3 +1,6 @@
+/**
+ * Esta pantalla se basa en la de inicio de la aplicación, además de manejar el apartado de los tabs personalizados.
+ */
 import { Link, Stack, useRouter, } from 'expo-router';
 import React, { useState } from 'react';
 import { Dimensions, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,29 +11,23 @@ import Chats from './chats';
 import Notification from './notifications';
 import Report from './reports';
 
-
+/**
+ * En esta pantalla se instancia un area de vista segura en el apartado superior, en donde se crean botones para cada uno de los apartados 
+ * del menu de tabs.
+ * 
+ * Se utiliza un useState para que cuando cambie el estado guardado de "activeTab" se cambie a la pantalla correspondiente a la que se quiere llegar, 
+ * por eso a la hora de tocar el boton se utiliza el "setActiveTab" se cambia el estado por el del elegido.
+ * @returns La pantalla completa de inicio y los tabs.
+ */
 export default function Home() {
-
-  //Datos de usuario
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
 
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('home');
-
-  const [type, setType] = useState('');
-  const [provider, setProvider] = useState('');
-  const [details, setDetails] = useState('');
-  const [address, setAddress] = useState('');
-  const [urgency, setUrgency] = useState('');
-
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
 
-      {/* Navbar FUERA del ScrollView y pegado arriba */}
       <SafeAreaView style={styles.navbarContainer} edges={['top']}>
         <View style={styles.navbar}>
           <TouchableOpacity onPress={() => setActiveTab('home')}>
@@ -85,7 +82,7 @@ export default function Home() {
               <View style={styles.mapPhotoContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                     
+
                     const placeId = '0x8fa44333b4ac94af:0xc9bf6a0297d6d313';
                     const url = `https://www.google.com/maps/search/?api=1&query_place_id=${placeId}`;
                     Linking.openURL(url);
@@ -124,19 +121,19 @@ export default function Home() {
         }
 
         {activeTab === 'reports' && (
-          <Report router={router} setActiveTab={setActiveTab} />
+          <Report />
         )}
 
         {activeTab === 'announces' && (
-          <Announces router={router} setActiveTab={setActiveTab} />
+          <Announces  />
         )}
 
         {activeTab === 'chats' && (
-          <Chats router={router} setActiveTab={setActiveTab} />
+          <Chats />
         )}
 
         {activeTab === 'notifications' && (
-          <Notification router={router} setActiveTab={setActiveTab} />
+          <Notification />
         )}
 
         {activeTab === 'user' && (

@@ -1,8 +1,14 @@
+/**
+ * 
+ */
 import { Link, Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-
+/**
+ * 
+ * @returns 
+ */
 export default function ASADAInfo() {
     const router = useRouter();
 
@@ -13,7 +19,7 @@ export default function ASADAInfo() {
 
 
             <ScrollView contentContainerStyle={styles.container}>
-                {/* Buscador */}
+
                 <View style={styles.searchContainer}>
                     <TextInput
                         placeholder="Buscar Asada......"
@@ -26,7 +32,6 @@ export default function ASADAInfo() {
                     />
                 </View>
 
-                {/* Tarjeta de información */}
                 <View style={styles.card}>
                     <Image
                         source={require('../assets/images/Asadagol.jpg')}
@@ -51,16 +56,13 @@ export default function ASADAInfo() {
                     </View>
                 </View>
 
-                {/* Botones de navegación */}
                 <View style={styles.navButtons}>
                     <TouchableOpacity style={styles.navButton}><Text style={styles.navText}>Anterior</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.navButton}><Text style={styles.navText}>Siguiente</Text></TouchableOpacity>
                 </View>
 
-                {/* Estado */}
                 <Text style={styles.status}>Estado: <Text style={styles.statusOpen}>Abierto</Text></Text>
 
-                {/* Servicios */}
                 <View style={styles.servicesBox}>
                     <Text style={styles.servicesTitle}>Tipo de servicio que brinda:</Text>
                     {[
@@ -78,24 +80,17 @@ export default function ASADAInfo() {
                     ))}
                 </View>
 
-                {/* Botón afiliarme */}
                 <Link href="/applicationForm" asChild>
                     <TouchableOpacity style={styles.joinButton}>
                         <Text style={styles.joinButtonText}>Afiliarme a esta ASADA</Text>
                     </TouchableOpacity>
                 </Link>
 
-
-
-
-
-                {/* Logo */}
                 <Image
                     source={require('../assets/images/manantial-logo.png')}
                     style={styles.logo}
                 />
 
-                {/* Botón regresar */}
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => router.back()}

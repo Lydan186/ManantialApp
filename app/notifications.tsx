@@ -1,11 +1,13 @@
-import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native';
+/**
+ * Está pantalla es la encargada de mostrar la información de las notificaciones.
+ */
+import { View, Text, StyleSheet } from 'react-native';
 
-type Props = {
-  router: any;
-  setActiveTab: (tab: string) => void;
-};
-
-const Notification: React.FC<Props> = ({ router, setActiveTab }) => {
+/**
+ * En está pantalla se utiliza la clase de Text para poder mostrar un texto, si llegara una notificación se mostraría aca.
+ * @returns La pantalla con el texto introducido.
+ */
+const Notification: React.FC = ({ }) => {
     return(
           <View style={styles.notificationBox}>
             <Text style={styles.notificationText}>

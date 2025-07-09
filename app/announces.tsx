@@ -1,12 +1,14 @@
+/**
+ * Está pantalla es la encargada de presentar los anunción del programa.
+ */
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-type Props = {
-  router: any;
-  setActiveTab: (tab: string) => void;
-};
-
-const Announces: React.FC<Props> = ({ router, setActiveTab }) => {
+/**
+ * En esta pantalla se utilizan las diferentes clases como Image, Text, etc. Esto para mostrar la pantalla de anuncios para el sistema.
+ * @returns La pantalla de anuncios.
+ */
+const Announces: React.FC = ({  }) => {
 
     return (
           <View style={styles.announcesBox}>

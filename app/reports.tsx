@@ -1,12 +1,15 @@
+/**
+ * En está pantalla se muestra la información para realizar un reporte.
+ */
 import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput } from 'react-native';
 import React, { useState } from 'react';
 
-type Props = {
-  router: any;
-  setActiveTab: (tab: string) => void;
-};
 
-const Report: React.FC<Props> = ({ router, setActiveTab }) => {
+/**
+ * Aqui se usa la clase de Text para realizar un reporte, en donde se muestran las diferentes opciones.
+ * @returns La pantalla de reportes.
+ */
+const Report: React.FC = ({ }) => {
 
       const [type, setType] = useState('');
       const [provider, setProvider] = useState('');
@@ -17,7 +20,6 @@ const Report: React.FC<Props> = ({ router, setActiveTab }) => {
       return(
     
 <View style={styles.reportBox}>
-            {/* Hooks requeridos */}
             <Text style={styles.label}>Tipo de reporte</Text>
             <View style={styles.row}>
               <View style={{ flex: 1, marginRight: 5 }}>

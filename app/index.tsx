@@ -1,3 +1,6 @@
+/**
+ * Está pantalla se encarga del inicio de sesión, además de redirigir hacia la pantalla de si olvido la contraseña o la de crear usuario.
+ */
 import { Image } from 'expo-image';
 import { Link, useRouter } from 'expo-router';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
@@ -6,13 +9,18 @@ import { ActivityIndicator, Alert, Dimensions, StyleSheet, Text, TextInput, Touc
 import { app } from '../scripts/conexiónFirebase';
 
 
-
+/**
+ * Aquí se crean las variables constantes para el uso de la aplicación, en la constante de handleLogin se pasan los parametros capturados por los inputs, 
+ * estos se capturan gracias al useState, si estos no son correctos se presenta un mensaje de error, pero si son correctos se usa la constante del auth, en donde 
+ * consigue los datos de la autenticación gracias a la conexión con Firebase, después se usa la función de signInWithEmailAndPassword, en donde se pasa la variable de auth, 
+ * email y password, ya que son correctas se envia al usuario al inicio de la aplicación.
+ * @returns 
+ */
 export default function HomeScreen() {
 
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [logoLoading, setLogoLoading] = useState(true);
 
   const handleLogin = async () => {

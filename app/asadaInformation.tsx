@@ -1,8 +1,14 @@
+/**
+ * Esta pantalla se basa en una pantalla de información sobre lo que son las ASADAS.
+ */
+
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
-
+/**
+ * Aqui se crean textos usando las clases de textos para escribir información sobre las ASADAS.
+ */
 export default function AsadaInformation() {
     const router = useRouter();
 
@@ -51,7 +57,6 @@ export default function AsadaInformation() {
         </>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {

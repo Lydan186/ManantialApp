@@ -1,9 +1,15 @@
+/**
+ * 
+ */
 import { Stack, useRouter, } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-
+/**
+ * 
+ * @returns 
+ */
 const ApplicationForm = () => {
     const router = useRouter();
     const { control, handleSubmit } = useForm();

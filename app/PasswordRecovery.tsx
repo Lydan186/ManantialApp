@@ -1,5 +1,5 @@
 /**
- * 
+ * Está pantalla se encarga de la recuperación de la contraseña para la cuenta que se haya digitado en el sistema.
  */
 
 import { Stack, useRouter } from 'expo-router';
@@ -9,8 +9,10 @@ import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } fro
 import { app } from '../scripts/conexiónFirebase';
 
 /**
- * 
- * @returns 
+ * En está pantalla se usa la función del sendPasswordResetEmail, esto usando el useState 
+ * de email para que a la hora de digitar el correo se envie un correo electronico al 
+ * correo que se digite y se realice el cambio de la contraseña.
+ * @returns La pantalla de la recuperación de contraseña.
  */
 export default function PasswordRecovery() {
   const [email, setEmail] = useState('');
@@ -59,7 +61,6 @@ export default function PasswordRecovery() {
           <Text style={styles.buttonText}>Regresar</Text>
         </TouchableOpacity>
         </View>
-
       </View>
       
     </>

@@ -1,11 +1,13 @@
+/**
+ * Está pantalla se encarga de mostrar los chats de la aplicación.
+ */
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-type Props = {
-    router: any;
-    setActiveTab: (tab: string) => void;
-};
-
-const Chats: React.FC<Props> = ({ router, setActiveTab }) => {
+/**
+ * Aqui de igual manera que los otros se utilizan las clases de Text, Image, View, para construir la pantalla de chats del programa.
+ * @returns La pantalla de chats del sistema.
+ */
+const Chats: React.FC = ({  }) => {
 
     return (
         <View style={styles.chatContainer}>
